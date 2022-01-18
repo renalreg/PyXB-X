@@ -10,6 +10,14 @@ Essentially the exact same reasoning as Jon discusses below, but with the intent
 
 ## Developer notes
 
+### Versioning
+
+Internally, PyXB holds 2 version numbers: a package version (used for installation, PyPi etc.) and a PyXB version (used for checking schema compatibility).
+
+The purpose of this project is to keep PyXB running on newer Python releases, and provide minor bug fixes that do not break backwards compatibility with the last official release of PyXB (1.2.6). Therefore, the PyXB version (`pyxb/__init__.py:version`) will remain at 1.2.6 indefinitely. In order to maintain some kind of remotely sensible package versioning, packages will all be versioned 1.2.6.*x*, where *x* is the PyXB-X release number. 
+
+While this is not strictly semantic versioning, given that we're really just doing maintenance releases, it's close enough as no change should ever break backwards compatibility.
+
 ### Python 3.8 testing failures
 
 Currently, `python setup.py test` fails on Python 3.8+. This is a false failure caused by changes to the `toxml` method (https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml).
