@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import sys
 if __name__ == '__main__':
     logging.basicConfig()
 _log = logging.getLogger(__name__)
@@ -107,7 +108,13 @@ class TestCTD (unittest.TestCase):
         self.assertEqual('irish', instance2.language)
         instance2.language = 'french'
         instance2.capitalized = False
-        xmlt = six.u('<tca:emptyWithAttr capitalized="false" language="french" xmlns:tca="URN:testCTD"/>')
+
+        # Handle Python 3.8 change in order behavior of toxml
+        # See https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml
+        if sys.version_info[1] < 8:
+            xmlt = six.u('<tca:emptyWithAttr capitalized="false" language="french" xmlns:tca="URN:testCTD"/>')
+        else:
+            xmlt = six.u('<tca:emptyWithAttr language="french" capitalized="false" xmlns:tca="URN:testCTD"/>')
         xmld = xmlt.encode('utf-8')
         self.assertEqual(ToDOM(instance2).toxml("utf-8"), xmld)
         self.assertNotEqual(instance.language, instance2.language)

@@ -9,7 +9,7 @@ from pyxb.utils import six
 from xml.dom import Node
 import pyxb.namespace
 import sys
-import imp
+import types
 
 import os.path
 
@@ -20,7 +20,7 @@ te_generator.addSchemaLocation('test-external.xsd')
 # Create a module into which we'll stick the shared types bindings.
 # Put it into the sys modules so the import directive in subsequent
 # code is resolved.
-st = imp.new_module('st')
+st = types.ModuleType('st')
 sys.modules['st'] = st
 
 # Now get the code for the shared types bindings, and evaluate it

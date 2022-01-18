@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import sys
 if __name__ == '__main__':
     logging.basicConfig()
 _log = logging.getLogger(__name__)
@@ -41,18 +42,27 @@ pyxb.utils.domutils.BindingDOMSupport.DeclareNamespace(pyxb.namespace.XMLSchema,
 
 class TestTrac_0094 (unittest.TestCase):
     body = 'something'
-    xmlt = six.u('''<anything xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">%s</anything>''') % (body,)
-    xmld = xmlt.encode('utf-8')
 
     def testFromXML (self):
-        instance = CreateFromDocument(self.xmlt)
+        xmlt = six.u('''<anything xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">%s</anything>''') % (self.body,)
+        instance = CreateFromDocument(xmlt)
         self.assertTrue(isinstance(instance, xs.string))
         self.assertEqual(instance, self.body)
         self.assertEqual(instance._element(), anything)
 
     def testToXML (self):
         instance = xs.string(self.body, _element=anything)
-        self.assertEqual(instance.toxml("utf-8", root_only=True), self.xmld)
+
+        # Handle Python 3.8 change in order behavior of toxml
+        # See https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml
+        xmlt_options = [
+            six.u('''<anything xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">%s</anything>''') % (self.body,),
+            six.u('''<anything xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">%s</anything>''') % (self.body,),
+            six.u('''<anything xsi:type="xs:string" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema">%s</anything>''') % (self.body,),
+        ]
+        xmld_options = [xmlt.encode('utf-8') for xmlt in xmlt_options]
+
+        self.assertIn(instance.toxml("utf-8", root_only=True), xmld_options)
 
     def testContainerCtor (self):
         i = xs.string(self.body, _element=anything)

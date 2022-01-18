@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import sys
 if __name__ == '__main__':
     logging.basicConfig()
 _log = logging.getLogger(__name__)
@@ -98,7 +99,12 @@ class TestTrac_0071 (unittest.TestCase):
         xmld = xmlt.encode('utf-8')
         self.assertEqual(field.toxml("utf-8", root_only=True), xmld)
 
-    MetaExpectedt = '<ns1:MetadataDocument xmlns:ns1="urn:trac-0071"><template>anewtemplate</template><timespan end="+INF" start="-INF"><field><name>title</name><value lang="ENG">foo</value></field></timespan></ns1:MetadataDocument>'
+    # Handle Python 3.8 change in order behavior of toxml
+    # See https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml
+    if sys.version_info[1] < 8:
+        MetaExpectedt = '<ns1:MetadataDocument xmlns:ns1="urn:trac-0071"><template>anewtemplate</template><timespan end="+INF" start="-INF"><field><name>title</name><value lang="ENG">foo</value></field></timespan></ns1:MetadataDocument>'
+    else:
+        MetaExpectedt = '<ns1:MetadataDocument xmlns:ns1="urn:trac-0071"><template>anewtemplate</template><timespan start="-INF" end="+INF"><field><name>title</name><value lang="ENG">foo</value></field></timespan></ns1:MetadataDocument>'
     MetaExpectedd = MetaExpectedt.encode('utf-8')
 
     def testMetaConstructor (self):

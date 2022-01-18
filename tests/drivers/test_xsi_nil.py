@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import sys
 if __name__ == '__main__':
     logging.basicConfig()
 _log = logging.getLogger(__name__)
@@ -167,14 +168,24 @@ class TestXSIType (unittest.TestCase):
         self.assertEqual(instance.optional, '')
         self.assertTrue(instance.optional._isNil())
 
-        xmlt = six.u('<complex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>')
+        # Handle Python 3.8 change in order behavior of toxml
+        # See https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml
+        if sys.version_info[1] < 8:
+            xmlt = six.u('<complex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>')
+        else:
+            xmlt = six.u('<complex xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>')
         xmld = xmlt.encode('utf-8')
         instance._setIsNil()
         self.assertEqual(instance.toDOM().documentElement.toxml("utf-8"), xmld)
         instance.validateBinding()
 
     def testComplex (self):
-        canonicalt = six.u('<complex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>')
+        # Handle Python 3.8 change in order behavior of toxml
+        # See https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml
+        if sys.version_info[1] < 8:
+            canonicalt = six.u('<complex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>')
+        else:
+            canonicalt = six.u('<complex xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>')
         canonicald = canonicalt.encode('utf-8')
         for xmlt in ( canonicalt,
                       six.u('<complex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"></complex>'),
