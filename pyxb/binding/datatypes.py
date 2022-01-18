@@ -48,6 +48,7 @@ import re
 import binascii
 import base64
 import math
+import numbers
 import decimal as python_decimal
 from pyxb.exceptions_ import *
 import pyxb.namespace
@@ -670,7 +671,6 @@ class _PyXBDateOnly_base (_PyXBDateTime_base, datetime.datetime):
                 except AttributeError:
                     pass
             else:
-                print(args)
                 fi = 0
                 while fi < len(cls._ValidFields):
                     fn = cls._ValidFields[fi]
@@ -680,6 +680,16 @@ class _PyXBDateOnly_base (_PyXBDateTime_base, datetime.datetime):
                         ctor_kw[fn] = kw[fn]
                     kw.pop(fn, None)
                     fi += 1
+
+                # https://github.com/renalreg/PyXB-X/issues/8
+                # Because PyXB dates are datetime not date underneath, Python 3.8+ correctly crashes as a result of
+                # the extra parameters for a datetime (but not in a date) being present. We'll silently discard them if
+                # they are of value "zero", as they're not included in the resulting argv array below, and zero is
+                # set as the default value above in any case.
+                for extra_arg in args[fi:]:
+                    if isinstance(extra_arg, numbers.Integral) and extra_arg == 0:
+                        fi += 1
+
                 if fi < len(args):
                     ctor_kw['tzinfo'] = args[fi]
                     fi += 1
