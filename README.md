@@ -18,15 +18,6 @@ The purpose of this project is to keep PyXB running on newer Python releases, an
 
 While this is not strictly semantic versioning, given that we're really just doing maintenance releases, it's close enough as no change should ever break backwards compatibility.
 
-### Python 3.8 testing failures
-
-Currently, `python setup.py test` fails on Python 3.8+. This is a false failure caused by changes to the `toxml` method (https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml).
-
-In Python 3.8+ `toxml` preserves the original element order, which the current tests do not assume. Since < 3.8 produces a slightly different, but equally valid output, we can't easily just change the unit tests to match.
-
-This is something I'll work on sorting out soon.
-
-
 ---
 
 Jon Foster (upstream) PyXB README follows:
