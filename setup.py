@@ -14,14 +14,14 @@ import sys
 # but the rightmost number will be incremented with each patch.
 version = "1.2.6.1"
 
-# Require Python 2.6 or higher or Python 3.4 or higher
+# Require Python 2.6 or higher or Python 3.5 or higher
 if (sys.version_info[:2] < (2, 6)) or (
-    (sys.version_info[0] == 3) and sys.version_info[:2] < (3, 4)
+    (sys.version_info[0] == 3) and sys.version_info[:2] < (3, 5)
 ):
     raise ValueError(
         """PyXB-X requires:
   Python2 version 2.6 or later; or
-  Python3 version 3.4 or later
+  Python3 version 3.5 or later
 (You have %s.)"""
         % (sys.version,)
     )
@@ -141,7 +141,6 @@ The major goals of PyXB are:
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
