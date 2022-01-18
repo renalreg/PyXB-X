@@ -9,12 +9,12 @@ from xml.dom import Node
 import xml.dom
 import pyxb.namespace
 
-class TestState (SAXElementState):
+class StateTest (SAXElementState):
     StateSequence = []
 
     def __init__ (self, *args, **kw):
         self.StateSequence.append(self)
-        super(TestState, self).__init__(*args, **kw)
+        super(StateTest, self).__init__(*args, **kw)
 
 BogusNamespace = pyxb.namespace.NamespaceInstance('urn:test-saxutils-bogus')
 books_ns = pyxb.namespace.NamespaceInstance('urn:loc.gov:books')
@@ -28,7 +28,7 @@ class TestInScopeNames (unittest.TestCase):
         return xmlns_map
 
     def tearDown (self):
-        TestState.StateSequence[:] = []
+        StateTest.StateSequence[:] = []
 
     def stripUndeclaredNamespaces (self, xmlns_map):
         xmlns_map = xmlns_map.copy()
@@ -50,12 +50,12 @@ class TestInScopeNames (unittest.TestCase):
       <p>another graf without namespace change</p>
     </notes>
 </book>'''.encode('utf-8')
-        saxer = make_parser(element_state_constructor=TestState, location_base='test_6_2_2', fallback_namespace=BogusNamespace)
+        saxer = make_parser(element_state_constructor=StateTest, location_base='test_6_2_2', fallback_namespace=BogusNamespace)
         handler = saxer.getContentHandler()
         saxer.parse(io.BytesIO(xmld))
 
         # First is root context; second is the book element
-        book = TestState.StateSequence[1]
+        book = StateTest.StateSequence[1]
         en = book.expandedName()
         self.assertTrue(en is not None)
         self.assertEqual(en.namespace(), books_ns)
@@ -63,20 +63,20 @@ class TestInScopeNames (unittest.TestCase):
         self.assertEqual(book.namespaceContext().defaultNamespace(), books_ns)
         self.assertEqual(book.namespaceContext().inScopeNamespaces().get('isbn'), isbn_ns)
 
-        title = TestState.StateSequence[2]
+        title = StateTest.StateSequence[2]
         xmlns_map = self.stripUndeclaredNamespaces(title.namespaceContext().inScopeNamespaces())
         self.assertEqual(2, len(xmlns_map))
         self.assertEqual('urn:loc.gov:books', xmlns_map[None].uri())
         self.assertEqual('urn:ISBN:0-395-36341-6', xmlns_map['isbn'].uri())
 
-        p = TestState.StateSequence[5]
+        p = StateTest.StateSequence[5]
         xmlns_map = self.stripUndeclaredNamespaces(p.namespaceContext().inScopeNamespaces())
         self.assertEqual(p.expandedName().localName(), 'p')
         self.assertEqual(2, len(xmlns_map))
         self.assertEqual('http://www.w3.org/1999/xhtml', xmlns_map[None].uri())
         self.assertEqual('urn:ISBN:0-395-36341-6', xmlns_map['isbn'].uri())
 
-        x = TestState.StateSequence[7]
+        x = StateTest.StateSequence[7]
         xmlns_map = self.stripUndeclaredNamespaces(x.namespaceContext().inScopeNamespaces())
         self.assertEqual(x.expandedName().localName(), 'p')
         self.assertEqual(2, len(xmlns_map))
@@ -101,19 +101,19 @@ class TestInScopeNames (unittest.TestCase):
     </table>
   </Beers>'''.encode('utf-8')
 
-        saxer = make_parser(element_state_constructor=TestState, location_base='test_6_2_3', fallback_namespace=BogusNamespace)
+        saxer = make_parser(element_state_constructor=StateTest, location_base='test_6_2_3', fallback_namespace=BogusNamespace)
         handler = saxer.getContentHandler()
         saxer.parse(io.BytesIO(xmld))
 
-        Beers = TestState.StateSequence[1]
+        Beers = StateTest.StateSequence[1]
         xmlns_map = self.stripUndeclaredNamespaces(Beers.namespaceContext().inScopeNamespaces())
         self.assertEqual(0, len(xmlns_map))
-        table = TestState.StateSequence[2]
+        table = StateTest.StateSequence[2]
         self.assertEqual(xhtml_ns.createExpandedName('table'), table.expandedName())
         xmlns_map = self.stripUndeclaredNamespaces(table.namespaceContext().inScopeNamespaces())
         self.assertEqual(1, len(xmlns_map))
         self.assertEqual('http://www.w3.org/1999/xhtml', xmlns_map[None].uri())
-        brandName = TestState.StateSequence[9]
+        brandName = StateTest.StateSequence[9]
         xmlns_map = self.stripUndeclaredNamespaces(brandName.namespaceContext().inScopeNamespaces())
         self.assertTrue(brandName.expandedName().namespace() is None)
         self.assertEqual('brandName', brandName.expandedName().localName())

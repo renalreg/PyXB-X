@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import sys
 if __name__ == '__main__':
     logging.basicConfig()
 _log = logging.getLogger(__name__)
@@ -46,7 +47,12 @@ class TestIssue0007 (unittest.TestCase):
 
     def testNilConstruction (self):
         i = number(_nil=True)
-        self.assertEqual(six.u('<number xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>').encode('utf-8'), i.toxml('utf-8', root_only=True))
+        # Handle Python 3.8 change in order behavior of toxml
+        # See https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml
+        if sys.version_info[1] < 8:
+            self.assertEqual(six.u('<number xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>').encode('utf-8'), i.toxml('utf-8', root_only=True))
+        else:
+            self.assertEqual(six.u('<number xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>').encode('utf-8'), i.toxml('utf-8', root_only=True))
         self.assertRaises(pyxb.ContentInNilInstanceError, i._setValue, 25)
 
     def testReplacement (self):

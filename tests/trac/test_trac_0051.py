@@ -11,7 +11,7 @@ import pyxb.utils.domutils
 import os.path
 xsd='''<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-<xs:element name="testElt">
+<xs:element name="eltTest">
   <xs:complexType>
   <xs:sequence>
     <xs:element name="content" type="xs:string"/>
@@ -40,7 +40,7 @@ class TestTrac_0051 (unittest.TestCase):
         e.toxml = v
 
     def testElement (self):
-        e = testElt('hello')
+        e = eltTest('hello')
         self.assertEqual('hello', e.content_)
         e.content_ = 'goodbye'
         self.assertEqual('goodbye', e.content_)

@@ -11,7 +11,7 @@ import pyxb.utils.domutils
 import os.path
 xsd='''<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-<xs:element name="testElt">
+<xs:element name="eltTest">
   <xs:complexType>
   <xs:sequence>
     <xs:any minOccurs="0" maxOccurs="unbounded"/>
@@ -42,7 +42,7 @@ class TestTrac_0052 (unittest.TestCase):
         self.__basis_log.level = self.__basis_loglevel
 
     def testInternalDOM (self):
-        xmls = '<testElt><wc1/><wc2 wca="3"/></testElt>'
+        xmls = '<eltTest><wc1/><wc2 wca="3"/></eltTest>'
         # Hide the warning about failure to convert wc1/wc2 to bindings
         self.__basis_log.setLevel(logging.ERROR)
         instance = CreateFromDocument(xmls)

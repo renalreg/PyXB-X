@@ -44,7 +44,12 @@ from pyxb.exceptions_ import *
 import unittest
 
 class TestTrac_0057 (unittest.TestCase):
-    XMLs = '<ns1:ObsProject almatype="APDM::ObsProject" revision="1.74" schemaVersion="8" xmlns:ns1="URN:test-trac-0057"><ns1:timeOfCreation>2009-05-08 21:23:45</ns1:timeOfCreation></ns1:ObsProject>'
+    # Handle Python 3.8 change in order behavior of toxml
+    # See https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml
+    if sys.version_info[1] < 8:
+        XMLs = '<ns1:ObsProject almatype="APDM::ObsProject" revision="1.74" schemaVersion="8" xmlns:ns1="URN:test-trac-0057"><ns1:timeOfCreation>2009-05-08 21:23:45</ns1:timeOfCreation></ns1:ObsProject>'
+    else:
+        XMLs = '<ns1:ObsProject schemaVersion="8" revision="1.74" almatype="APDM::ObsProject" xmlns:ns1="URN:test-trac-0057"><ns1:timeOfCreation>2009-05-08 21:23:45</ns1:timeOfCreation></ns1:ObsProject>'
     XMLd = XMLs.encode('utf-8')
 
     def exec_toxmld (self, v):

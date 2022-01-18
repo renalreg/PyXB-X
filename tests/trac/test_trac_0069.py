@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import sys
 if __name__ == '__main__':
     logging.basicConfig()
 _log = logging.getLogger(__name__)
@@ -88,7 +89,12 @@ class TestTrac_0069 (unittest.TestCase):
         self.assertTrue(isinstance(fv2, value_type))
         self.assertEqual('fv2', fv2.value())
         newdoc.validateBinding()
-        xmlt = six.u('<ns1:MetadataDocument xmlns:ns1="urn:trac-0069"><template>anewtemplate</template><timespan end="+INF" start="-INF"><field><name>name</name><value>fv0</value><value>fv1</value><value>fv2</value></field></timespan></ns1:MetadataDocument>')
+        # Handle Python 3.8 change in order behavior of toxml
+        # See https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml
+        if sys.version_info[1] < 8:
+            xmlt = six.u('<ns1:MetadataDocument xmlns:ns1="urn:trac-0069"><template>anewtemplate</template><timespan end="+INF" start="-INF"><field><name>name</name><value>fv0</value><value>fv1</value><value>fv2</value></field></timespan></ns1:MetadataDocument>')
+        else:
+            xmlt = six.u('<ns1:MetadataDocument xmlns:ns1="urn:trac-0069"><template>anewtemplate</template><timespan start="-INF" end="+INF"><field><name>name</name><value>fv0</value><value>fv1</value><value>fv2</value></field></timespan></ns1:MetadataDocument>')
         xmld = xmlt.encode('utf-8')
         self.assertEqual(newdoc.toxml("utf-8", root_only=True), xmld)
 

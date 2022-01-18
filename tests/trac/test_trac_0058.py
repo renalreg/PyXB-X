@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import sys
 if __name__ == '__main__':
     logging.basicConfig()
 _log = logging.getLogger(__name__)
@@ -30,7 +31,12 @@ import unittest
 
 class TestTrac_0058 (unittest.TestCase):
     def testRoundTrip (self):
-        xmlt = six.u('<iopt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"></iopt>')
+        # Handle Python 3.8 change in order behavior of toxml
+        # See https://docs.python.org/3/library/xml.dom.minidom.html#xml.dom.minidom.Node.toxml
+        if sys.version_info[1] < 8:
+            xmlt = six.u('<iopt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"></iopt>')
+        else:
+            xmlt = six.u('<iopt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></iopt>')
         xmld = xmlt.encode('utf-8')
         instance = CreateFromDocument(xmlt)
         self.assertTrue(instance._isNil())
