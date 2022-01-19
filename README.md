@@ -2,7 +2,7 @@
 
 What is this fork for?:
 
-Essentially the exact same reasoning as Jon discusses below, but with the intention of having a PyPI-published copy available.
+Essentially the exact same reasoning as Jon discusses below, but with the intention of having a PyPI-published copy available, and an automated test pipeline.
 
 ## Installation
 
