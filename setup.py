@@ -29,8 +29,12 @@ if (sys.version_info[:2] < (2, 6)) or (
 import os
 import re
 from setuptools import setup
+from subprocess import check_call
 import sys
 import pyxb.utils.utility
+
+# See ./pyxb/bundles/opengis/README.txt
+check_call([ './maintainer/genbundles common opengis' ], shell=True, env=dict(os.environ, **{'PYXB_ROOT': '.'}))
 
 packages = [
     "pyxb",
