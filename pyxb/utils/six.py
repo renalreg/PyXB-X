@@ -189,6 +189,9 @@ class _SixMetaPathImporter:
 
     This class implemented a PEP 451 finder and loader. It should be compatible
     with Python 3.4 onwards.
+
+    Also contains the finder and loader for a PEP 302 import system, which is
+    used by Python 3.3 and earlier.
     """
 
     def __init__(self, six_module_name):
@@ -201,6 +204,11 @@ class _SixMetaPathImporter:
 
     def _get_module(self, fullname):
         return self.known_modules[self.name + "." + fullname]
+
+    def find_module(self, fullname, path=None):
+        if fullname in self.known_modules:
+            return self
+        return None
 
     def find_spec(self, fullname, path=None, target=None):
         if fullname in self.known_modules:
@@ -225,6 +233,20 @@ class _SixMetaPathImporter:
         else:
             mod.__loader__ = self
         sys.modules[fullname] = mod
+
+    def load_module(self, fullname):
+        try:
+            # in case of a reload
+            return sys.modules[fullname]
+        except KeyError:
+            pass
+        mod = self.__get_module(fullname)
+        if isinstance(mod, MovedModule):
+            mod = mod._resolve()
+        else:
+            mod.__loader__ = self
+        sys.modules[fullname] = mod
+        return mod
 
     def is_package(self, fullname):
         """
