@@ -110,7 +110,7 @@ class NamespaceArchive (object):
         rv._readToStage(stage)
         return rv
 
-    __ArchivePattern_re = re.compile('\.wxs$')
+    __ArchivePattern_re = re.compile(r'\.wxs$')
 
     @classmethod
     def PreLoadArchives (cls, archive_path=None, reset=False):

@@ -42,8 +42,8 @@ packages = [
 ]
 package_data = {}
 
-init_re = re.compile("^__init__\.py$")
-wxs_re = re.compile("^.*\.wxs$")
+init_re = re.compile(r"^__init__\.py$")
+wxs_re = re.compile(r"^.*\.wxs$")
 
 setup_path = os.path.dirname(__file__)
 bundle_base = os.path.join(setup_path, "pyxb", "bundles")
