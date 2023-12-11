@@ -469,6 +469,7 @@ _importer._add_module(Module_six_moves_urllib_request(__name__ + ".moves.urllib.
 
 
 class Module_six_moves_urllib_response(_LazyModule):
+
     """Lazy loading of moved objects in six.moves.urllib_response"""
 
 
@@ -518,7 +519,6 @@ class Module_six_moves_urllib(types.ModuleType):
 
     def __dir__(self):
         return ['parse', 'error', 'request', 'response', 'robotparser']
-
 
 _importer._add_module(Module_six_moves_urllib(__name__ + ".moves.urllib"),
                       "moves.urllib")
@@ -601,6 +601,7 @@ else:
     callable = callable
 _add_doc(get_unbound_function,
          """Get the function out of a possibly unbound function""")
+
 
 get_method_function = operator.attrgetter(_meth_func)
 get_method_self = operator.attrgetter(_meth_self)
@@ -779,7 +780,6 @@ if print_ is None:
                     errors = "strict"
                 data = data.encode(fp.encoding, errors)
             fp.write(data)
-
         want_unicode = False
         sep = kwargs.pop("sep", None)
         if sep is not None:
