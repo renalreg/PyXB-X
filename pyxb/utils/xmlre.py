@@ -15,7 +15,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-"""Support for regular expressions conformant to the XML Schema specification.
+r"""Support for regular expressions conformant to the XML Schema specification.
 
 For the most part, XML regular expressions are similar to the POSIX
 ones, and can be handled by the Python C{re} module.  The exceptions
@@ -76,7 +76,7 @@ class RegularExpressionError (ValueError):
 
 _CharClassEsc_re = re.compile(r'\\(?:(?P<cgProp>[pP]{(?P<charProp>[-A-Za-z0-9]+)})|(?P<cgClass>[^pP]))')
 def _MatchCharClassEsc(text, position):
-    """Parse a U{charClassEsc<http://www.w3.org/TR/xmlschema-2/#nt-charClassEsc>} term.
+    r"""Parse a U{charClassEsc<http://www.w3.org/TR/xmlschema-2/#nt-charClassEsc>} term.
 
     This is one of:
 

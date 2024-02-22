@@ -40,14 +40,14 @@ import re
 # This expression replaces markers in template text with the value
 # obtained by looking up the marker in a dictionary.
 # %{id} = value
-_substIdPattern = re.compile("%{(?P<id>\w+)}")
+_substIdPattern = re.compile(r"%{(?P<id>\w+)}")
 
 # This expression performs conditional substitution: if the expression
 # provided evaluates to true in a given context, then one value is
 # substituted, otherwise the alternative value is substituted.
 # %{?<cond>??<true>?:<false>?}
 # %{?1 == 2??true?:false?}
-_substConditionalPattern = re.compile("%{\?(?P<expr>.+?)\?\?(?P<true>.*?)(\?:(?P<false>.*?))?\?}", re.MULTILINE + re.DOTALL)
+_substConditionalPattern = re.compile(r"%{\?(?P<expr>.+?)\?\?(?P<true>.*?)(\?:(?P<false>.*?))?\?}", re.MULTILINE + re.DOTALL)
 
 # This expression tests whether an identifier is defined to a non-None
 # value in the context; if so, it replaces the marker with template
@@ -58,11 +58,11 @@ _substConditionalPattern = re.compile("%{\?(?P<expr>.+?)\?\?(?P<true>.*?)(\?:(?P
 # with the value of the test expression.
 # %{?<id>?+<yessubst>?-?<nosubst>}}
 # %{?maybe_text?+?@ is defined to be %{?@}?}
-_substIfDefinedPattern = re.compile("%{\?(?P<id>\w+)(\?\+(?P<repl>.*?))?(\?\-(?P<ndrepl>.*?))?\?}", re.MULTILINE + re.DOTALL)
+_substIfDefinedPattern = re.compile(r"%{\?(?P<id>\w+)(\?\+(?P<repl>.*?))?(\?\-(?P<ndrepl>.*?))?\?}", re.MULTILINE + re.DOTALL)
 
 # The pattern which, if present in the body of a IfDefined block, is
 # replaced by the test expression.
-_substDefinedBodyPattern = re.compile("\?@")
+_substDefinedBodyPattern = re.compile(r"\?@")
 
 def _bodyIfDefinedPattern (match_object, dictionary):
     global _substDefinedBodyPattern

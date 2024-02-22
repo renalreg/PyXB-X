@@ -9,7 +9,7 @@ import pyxb.binding.basis
 import pyxb.utils.domutils
 
 import os.path
-xsd='''<?xml version="1.0" encoding="UTF-8"?>
+xsd=r'''<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="URN:test-trac-0047" xmlns:gml="URN:test-trac-0047">
         <simpleType name="NilReasonEnumeration">
                 <union>
