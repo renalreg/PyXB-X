@@ -127,11 +127,11 @@ class TestCodePointSet (unittest.TestCase):
 
         c = CodePointSet()
         c.add(']')
-        self.assertEqual('[\]]', c.asPattern())
+        self.assertEqual(r'[\]]', c.asPattern())
         c = CodePointSet()
         c.add('-')
         c.add('+')
-        self.assertEqual('[+\-]', c.asPattern())
+        self.assertEqual(r'[+\-]', c.asPattern())
 
 
     def testAsSingleCharacter (self):
