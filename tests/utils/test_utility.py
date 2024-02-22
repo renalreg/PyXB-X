@@ -583,8 +583,8 @@ class TestUniqueIdentifier (unittest.TestCase):
 import os
 import re
 class TestGetMatchingFiles (unittest.TestCase):
-    __WXS_re = re.compile('\.wxs$')
-    __NoExt_re = re.compile('(^|\%s)[^\.]+$' % os.sep)
+    __WXS_re = re.compile(r'\.wxs$')
+    __NoExt_re = re.compile(r'(^|\%s)[^\.]+$' % os.sep)
     __directory = None
     def setUp (self):
         self.__directory = tempfile.mkdtemp()

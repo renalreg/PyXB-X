@@ -2476,7 +2476,7 @@ from %s import *
 
         pyxb.namespace.XML.validateComponentModel()
 
-    __stripSpaces_re = re.compile('\s\s\s+')
+    __stripSpaces_re = re.compile(r'\s\s\s+')
     def __stripSpaces (self, string):
         return self.__stripSpaces_re.sub(' ', string)
 

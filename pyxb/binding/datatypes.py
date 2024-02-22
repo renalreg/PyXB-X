@@ -231,7 +231,7 @@ class duration (basis.simpleTypeDefinition, datetime.timedelta, basis._Represent
     _XsdBaseType = anySimpleType
     _ExpandedName = pyxb.namespace.XMLSchema.createExpandedName('duration')
 
-    __Lexical_re = re.compile('^(?P<neg>-?)P((?P<years>\d+)Y)?((?P<months>\d+)M)?((?P<days>\d+)D)?(?P<Time>T((?P<hours>\d+)H)?((?P<minutes>\d+)M)?(((?P<seconds>\d+)(?P<fracsec>\.\d+)?)S)?)?$')
+    __Lexical_re = re.compile(r'^(?P<neg>-?)P((?P<years>\d+)Y)?((?P<months>\d+)M)?((?P<days>\d+)D)?(?P<Time>T((?P<hours>\d+)H)?((?P<minutes>\d+)M)?(((?P<seconds>\d+)(?P<fracsec>\.\d+)?)S)?)?$')
 
     # We do not use weeks
     __XSDFields = ( 'years', 'months', 'days', 'hours', 'minutes', 'seconds' )
@@ -386,13 +386,13 @@ class _PyXBDateTime_base (basis.simpleTypeDefinition, basis._RepresentAsXsdLiter
     # Map from strptime/strftime formats to the regular expressions we
     # use to extract them.  We're more strict than strptime, so not
     # trying to use that.
-    __PatternMap = { '%Y' : '(?P<negYear>-?)(?P<year>\d{4,})'
-                   , '%m' : '(?P<month>\d{2})'
-                   , '%d' : '(?P<day>\d{2})'
-                   , '%H' : '(?P<hour>\d{2})'
-                   , '%M' : '(?P<minute>\d{2})'
-                   , '%S' : '(?P<second>\d{2})(?P<fracsec>\.\d+)?'
-                   , '%Z' : '(?P<tzinfo>Z|[-+]\d\d:\d\d)' }
+    __PatternMap = { '%Y' : r'(?P<negYear>-?)(?P<year>\d{4,})'
+                   , '%m' : r'(?P<month>\d{2})'
+                   , '%d' : r'(?P<day>\d{2})'
+                   , '%H' : r'(?P<hour>\d{2})'
+                   , '%M' : r'(?P<minute>\d{2})'
+                   , '%S' : r'(?P<second>\d{2})(?P<fracsec>\.\d+)?'
+                   , '%Z' : r'(?P<tzinfo>Z|[-+]\d\d:\d\d)' }
 
     # Cache of compiled regular expressions to parse lexical space of
     # a subclass.

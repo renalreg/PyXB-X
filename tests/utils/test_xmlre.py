@@ -54,13 +54,13 @@ class TestXMLRE (unittest.TestCase):
         self.assertEqual(2, position)
 
     def testMatchCharProperty (self):
-        self.assertRaises(xmlre.RegularExpressionError, xmlre._MatchAtom, "\pL", 0)
-        self.assertRaises(xmlre.RegularExpressionError, xmlre._MatchAtom, "\p{L", 0)
-        text = "\p{L}"
+        self.assertRaises(xmlre.RegularExpressionError, xmlre._MatchAtom, r"\pL", 0)
+        self.assertRaises(xmlre.RegularExpressionError, xmlre._MatchAtom, r"\p{L", 0)
+        text = r"\p{L}"
         (charset, position) = xmlre._MatchAtom(text, 0)
         self.assertEqual(position, len(text))
         self.assertEqual(charset, unicode.PropertyMap['L'].asPattern())
-        text = "\p{IsCyrillic}"
+        text = r"\p{IsCyrillic}"
         (charset, position) = xmlre._MatchAtom(text, 0)
         self.assertEqual(position, len(text))
         self.assertEqual(charset, unicode.BlockMap['Cyrillic'].asPattern())
@@ -181,7 +181,7 @@ class TestXMLRE (unittest.TestCase):
         self.assertEqual('^(?:Why[ ]not\\?)$', xmlre.XMLToPython(r'Why[ ]not\?'))
 
     def testRegularExpressions (self):
-        text = '[\i-[:]][\c-[:]]*'
+        text = r'[\i-[:]][\c-[:]]*'
         compiled_re = re.compile(xmlre.XMLToPython(text))
         self.assertTrue(compiled_re.match('identifier'))
         self.assertFalse(compiled_re.match('0bad'))
