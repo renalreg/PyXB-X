@@ -180,13 +180,15 @@ class MovedAttribute(_LazyDescr):
         return getattr(module, self.attr)
 
 
-class _SixMetaPathImporter(object):
-
+class _SixMetaPathImporter:
     """
     A meta path importer to import six.moves and its submodules.
 
-    This class implements a PEP302 finder and loader. It should be compatible
-    with Python 2.5 and all existing versions of Python3
+    This class implemented a PEP 451 finder and loader. It should be compatible
+    with Python 3.4 onwards.
+
+    Also contains the finder and loader for a PEP 302 import system, which is
+    used by Python 3.3 and earlier.
     """
 
     def __init__(self, six_module_name):
@@ -205,11 +207,30 @@ class _SixMetaPathImporter(object):
             return self
         return None
 
+    def find_spec(self, fullname, path=None, target=None):
+        import importlib.util
+        if fullname in self.known_modules:
+            spec = importlib.util.spec_from_loader(fullname, self)
+            return spec
+        return None
+
     def __get_module(self, fullname):
         try:
             return self.known_modules[fullname]
         except KeyError:
             raise ImportError("This loader does not know module " + fullname)
+
+    def create_module(self, spec):
+        return None
+
+    def exec_module(self, module):
+        fullname = module.__name__
+        mod = self.__get_module(fullname)
+        if isinstance(mod, MovedModule):
+            mod = mod._resolve()
+        else:
+            mod.__loader__ = self
+        sys.modules[fullname] = mod
 
     def load_module(self, fullname):
         try:
