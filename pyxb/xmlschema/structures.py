@@ -1180,7 +1180,7 @@ class _AttributeWildcard_mixin (pyxb.cscRoot):
         if local_wildcard is not None:
             # Clause 2.2.1
             return Wildcard(process_contents=local_wildcard.processContents(),
-                            namespace_constraint=Wildcard.IntensionalIntersection(agd_constraints + [local_wildcard.namespaecConstraint()]),
+                            namespace_constraint=Wildcard.IntensionalIntersection(agd_constraints + [local_wildcard.namespaceConstraint()]),
                             annotation=local_wildcard.annotation(),
                             namespace_context=namespace_context)
         # Clause 2.2.2
