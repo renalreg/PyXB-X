@@ -1404,7 +1404,8 @@ class _ModuleNaming_mixin (object):
             if as_path is not None:
                 aux_imports.append('from . import %s as %s' % (mr.modulePath(), as_path))
             else:
-                aux_imports.append('from . import %s' % (mr.modulePath(),))
+                # We did't give as_path name to pybx.* module
+                aux_imports.append('import %s' % (mr.modulePath(),))
         # It's important to sort the imports here, so we reproducibly generate
         # the same code for the same input.  It really doesn't matter *how*
         # they're sorted.
