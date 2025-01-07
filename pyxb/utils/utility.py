@@ -343,7 +343,7 @@ class _DeconflictSymbols_mixin (object):
     """There are no reserved symbols in the base class."""
 
 # Regular expression detecting tabs, carriage returns, and line feeds
-__TabCRLF_re = re.compile("[\t\n\r]")
+__TabCRLF_re = re.compile(r"[\t\n\r]")
 # Regular expressoin detecting sequences of two or more spaces
 __MultiSpace_re = re.compile(" +")
 
@@ -948,7 +948,7 @@ class UTCOffsetTimeZone (datetime.tzinfo):
     """
 
     # Regular expression that matches valid ISO8601 time zone suffixes
-    __Lexical_re = re.compile('^([-+])(\d\d):(\d\d)$')
+    __Lexical_re = re.compile(r'^([-+])(\d\d):(\d\d)$')
 
     # The offset in minutes east of UTC.
     __utcOffset_min = 0
@@ -1128,7 +1128,7 @@ def GetMatchingFiles (path, pattern=None, default_path_wildcard=None, default_pa
     within the archive path specified by the user.  One could use::
 
       files = GetMatchingFiles('&bundles//:+',
-                               pattern=re.compile('.*\.wxs$'),
+                               pattern=re.compile('.*\\.wxs$'),
                                default_path_wildcard='+',
                                default_path='/usr/local/pyxb/nsarchives',
                                prefix_pattern='&',
