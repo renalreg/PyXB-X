@@ -12,7 +12,7 @@ import sys
 # last release of PyXB (1.2.6), so the PyXB version will remain
 # the same. The release number will remain based on 1.2.6,
 # but the rightmost number will be incremented with each patch.
-version = "1.2.6.2"
+version = "1.2.6.3"
 
 # Require Python 2.6 or higher or Python 3.5 or higher
 if (sys.version_info[:2] < (2, 6)) or (
