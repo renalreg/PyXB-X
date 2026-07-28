@@ -494,7 +494,20 @@ class _PyXBDateTime_base (basis.simpleTypeDefinition, basis._RepresentAsXsdLiter
 
     @classmethod
     def XsdLiteral (cls, value):
-        iso = value.replace(tzinfo=None).isoformat()
+        # FIX for Python 3.12+: Use base Python types to avoid __init__ constraint
+        # validation when stripping tzinfo for string formatting.
+        if isinstance(value, datetime.datetime):
+            dt = datetime.datetime(value.year, value.month, value.day, value.hour,
+                                   value.minute, value.second, value.microsecond)
+        elif isinstance(value, datetime.time):
+            dt = datetime.time(value.hour, value.minute, value.second, value.microsecond)
+        elif isinstance(value, datetime.date):
+            dt = datetime.date(value.year, value.month, value.day)
+        else:
+            # Fallback for any other type just in case
+            dt = value.replace(tzinfo=None)
+
+        iso = dt.isoformat()
         if 0 <= iso.find('.'):
             iso = iso.rstrip('0')
         if value.tzinfo is not None:
@@ -686,9 +699,18 @@ class _PyXBDateOnly_base (_PyXBDateTime_base, datetime.datetime):
                 # the extra parameters for a datetime (but not in a date) being present. We'll silently discard them if
                 # they are of value "zero", as they're not included in the resulting argv array below, and zero is
                 # set as the default value above in any case.
+                # Annoyingly, Python 3.12+ passes default 1s for month and day, which we also need to discard.
                 for extra_arg in args[fi:]:
-                    if isinstance(extra_arg, numbers.Integral) and extra_arg == 0:
-                        fi += 1
+                    if isinstance(extra_arg, numbers.Integral):
+                        if extra_arg == 0:
+                            fi += 1
+                        # Handle Python 3.12+ datetime.replace() passing default month and day
+                        elif extra_arg == 1 and fi in (1, 2):
+                            fi += 1
+                        else:
+                            break
+                    else:
+                        break
 
                 if fi < len(args):
                     ctor_kw['tzinfo'] = args[fi]
