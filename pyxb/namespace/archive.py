@@ -19,6 +19,7 @@ Namespaces<http://www.w3.org/TR/2006/REC-xml-names-20060816/index.html>}."""
 import logging
 import os
 import os.path
+import warnings
 import pyxb
 import pyxb.utils.utility
 from pyxb.utils import six
@@ -323,6 +324,14 @@ class NamespaceArchive (object):
         return pickler
 
     def __createUnpickler (self):
+        warnings.warn(
+            "Loading PyXB namespace archives (.wxs) uses Python pickle "
+            "deserialization, which may execute arbitrary code. "
+            "Only load archives from trusted sources. "
+            "See https://github.com/renalreg/PyXB-X/issues/25",
+            RuntimeWarning,
+            stacklevel=2,
+        )
         unpickler = pickle.Unpickler(open(self.__archivePath, 'rb'))
 
         fmt = unpickler.load()
