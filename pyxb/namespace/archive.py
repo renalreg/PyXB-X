@@ -19,6 +19,7 @@ Namespaces<http://www.w3.org/TR/2006/REC-xml-names-20060816/index.html>}."""
 import logging
 import os
 import os.path
+import warnings
 import pyxb
 import pyxb.utils.utility
 from pyxb.utils import six
@@ -47,6 +48,15 @@ def GetArchivePath ():
 # Stuff required for pickling
 from pyxb.utils.six.moves import cPickle as pickle
 import re
+
+warnings.warn(
+    "Loading PyXB namespace archives (.wxs) uses Python pickle "
+    "deserialization, which may execute arbitrary code. "
+    "Only load archives from trusted sources. "
+    "See https://github.com/renalreg/PyXB-X/issues/25",
+    RuntimeWarning,
+    stacklevel=2,
+)
 
 class NamespaceArchive (object):
     """Represent a file from which one or more namespaces can be read, or to
